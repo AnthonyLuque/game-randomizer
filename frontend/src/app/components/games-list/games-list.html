@@ -1,0 +1,41 @@
+<!-- games-list.component.html -->
+<div class="games-list">
+  <h2>Jeux disponibles ({{ availableGames().length }})</h2>
+  
+  <mat-card class="games-container">
+    @if (availableGames().length > 0) {
+      <mat-list>
+        @for (game of availableGames(); track game.id) {
+          <mat-list-item>
+            <span matListItemTitle>{{ game.title }}</span>
+            <span matListItemLine class="criteria-list">
+              {{ getCriteriaNames(game) }}
+            </span>
+          </mat-list-item>
+        }
+      </mat-list>
+    } @else {
+      <p class="empty-state">Aucun jeu ne correspond aux critères sélectionnés</p>
+    }
+  </mat-card>
+  
+  <button 
+    mat-raised-button 
+    color="primary" 
+    class="randomize-button"
+    [disabled]="availableGames().length === 0"
+    (click)="randomize()"
+  >
+    🎲 Tirer au sort un jeu
+  </button>
+  
+  @if (selectedGame()) {
+    <mat-card class="result-card">
+      <h3>🎉 Jeu sélectionné :</h3>
+      <h2>{{ selectedGame()!.title }}</h2>
+      <p class="criteria-result">
+        {{ getSelectedGameCriteria() }}
+      </p>
+    </mat-card>
+  }
+</div>

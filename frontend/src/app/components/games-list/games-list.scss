@@ -1,0 +1,94 @@
+// games-list.component.scss
+.games-list {
+  padding: 20px;
+  
+  h2 {
+    margin-top: 0;
+    margin-bottom: 16px;
+    color: #333;
+    font-size: 1.5rem;
+  }
+
+  .games-container {
+    margin-bottom: 20px;
+    max-height: 400px;
+    overflow-y: auto;
+    
+    mat-list {
+      padding: 0;
+      
+      mat-list-item {
+        border-bottom: 1px solid #f0f0f0;
+        
+        &:last-child {
+          border-bottom: none;
+        }
+        
+        .criteria-list {
+          color: #666;
+          font-size: 0.9rem;
+          font-style: italic;
+        }
+      }
+    }
+    
+    .empty-state {
+      color: #999;
+      font-style: italic;
+      text-align: center;
+      padding: 40px 20px;
+      margin: 0;
+    }
+  }
+
+  .randomize-button {
+    width: 100%;
+    height: 56px;
+    font-size: 1.1rem;
+    font-weight: 500;
+    margin-bottom: 20px;
+    
+    &:disabled {
+      cursor: not-allowed;
+    }
+  }
+
+  .result-card {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    color: white;
+    padding: 24px;
+    text-align: center;
+    animation: slideIn 0.5s ease-out;
+    
+    h3 {
+      margin: 0 0 8px 0;
+      font-size: 1.2rem;
+      font-weight: 400;
+      opacity: 0.9;
+    }
+    
+    h2 {
+      margin: 0 0 12px 0;
+      font-size: 2rem;
+      font-weight: 700;
+      color: white;
+    }
+    
+    .criteria-result {
+      margin: 0;
+      font-size: 1rem;
+      opacity: 0.9;
+    }
+  }
+}
+
+@keyframes slideIn {
+  from {
+    opacity: 0;
+    transform: translateY(-20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}

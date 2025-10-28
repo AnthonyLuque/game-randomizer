@@ -1,0 +1,45 @@
+<div class="selector-container">
+  <h2>Joueurs</h2>
+  
+  <!-- Zone des joueurs sélectionnés (chips) -->
+  <mat-chip-set class="selected-items" aria-label="Joueurs sélectionnés">
+    @for (player of selectedPlayers(); track player.id) {
+      <mat-chip [removable]="true" (removed)="onRemovePlayer(player)">
+        {{ player.username }}
+        <button matChipRemove>
+          <mat-icon>cancel</mat-icon>
+        </button>
+      </mat-chip>
+    }
+    @empty {
+      <p class="empty-state">Aucun joueur sélectionné</p>
+    }
+  </mat-chip-set>
+  
+  <!-- Champ de recherche avec autocomplétion -->
+  <mat-form-field class="search-field">
+    <mat-label>Rechercher un joueur</mat-label>
+    <input 
+      matInput 
+      [formControl]="searchControl"
+      [matAutocomplete]="auto"
+      placeholder="Commencez à taper..."
+    >
+    <mat-autocomplete #auto="matAutocomplete" (optionSelected)="onPlayerSelected($event)">
+      @for (player of filteredPlayers(); track player.id) {
+        <mat-option [value]="player">
+          <span>{{ player.username }}</span>
+          @if (warnings().has(player.id)) {
+            <ng-container>
+                <mat-icon class="warning-icon">warning</mat-icon>
+                <small class="warning-text">{{ warnings().get(player.id) }}</small>
+            </ng-container>
+          }
+        </mat-option>
+      }
+      @empty {
+        <mat-option disabled>Aucun joueur trouvé</mat-option>
+      }
+    </mat-autocomplete>
+  </mat-form-field>
+</div>
