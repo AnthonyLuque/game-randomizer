@@ -1,0 +1,31 @@
+// admin.component.scss
+.admin-container {
+  height: calc(100vh - 64px); // 64px = hauteur de la toolbar
+  
+  .admin-sidenav {
+    width: 250px;
+    border-right: 1px solid #e0e0e0;
+    
+    mat-list-item {
+      cursor: pointer;
+      transition: background-color 0.2s;
+      
+      &:hover {
+        background-color: #f5f5f5;
+      }
+      
+      &.active {
+        background-color: #e3f2fd;
+        border-left: 4px solid #1976d2;
+        
+        mat-icon {
+          color: #1976d2;
+        }
+      }
+    }
+  }
+  
+  .admin-content {
+    padding: 24px;
+  }
+}

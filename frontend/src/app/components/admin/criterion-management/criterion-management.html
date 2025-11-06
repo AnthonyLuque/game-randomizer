@@ -1,0 +1,82 @@
+<!-- criterion-management.component.html -->
+<div class="management-container">
+  <h2>📋 Gestion des critères</h2>
+
+  <div class="table-wrapper">
+    <table mat-table [dataSource]="criteria()" class="criteria-table">
+      
+      <!-- Colonne Nom -->
+      <ng-container matColumnDef="name">
+        <th mat-header-cell *matHeaderCellDef>Nom du critère</th>
+        <td mat-cell *matCellDef="let criterion">
+          @if (criterion.isEditing) {
+            <mat-form-field class="edit-field" appearance="outline">
+              <input 
+                matInput 
+                [(ngModel)]="criterion.name"
+                (keyup.enter)="saveEdit(criterion)"
+                (keyup.escape)="cancelEdit(criterion)"
+                placeholder="Nom du critère"
+              >
+            </mat-form-field>
+          } @else {
+            <strong>{{ criterion.name }}</strong>
+          }
+        </td>
+      </ng-container>
+
+      <!-- Colonne Actions -->
+      <ng-container matColumnDef="actions">
+        <th mat-header-cell *matHeaderCellDef class="actions-header">Actions</th>
+        <td mat-cell *matCellDef="let criterion" class="actions-cell">
+          @if (criterion.isEditing) {
+            <button mat-mini-fab color="primary" (click)="saveEdit(criterion)" title="Sauvegarder">
+              <mat-icon>check</mat-icon>
+            </button>
+            <button mat-mini-fab (click)="cancelEdit(criterion)" title="Annuler">
+              <mat-icon>close</mat-icon>
+            </button>
+          } @else {
+            <button mat-icon-button (click)="startEdit(criterion)" title="Modifier">
+              <mat-icon>edit</mat-icon>
+            </button>
+            <button mat-icon-button color="warn" (click)="delete(criterion)" title="Supprimer">
+              <mat-icon>delete</mat-icon>
+            </button>
+          }
+        </td>
+      </ng-container>
+
+      <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+      <tr mat-row *matRowDef="let row; columns: displayedColumns;" class="table-row"></tr>
+    </table>
+  </div>
+
+  <!-- Ligne d'ajout -->
+  @if (isAdding()) {
+    <div class="add-row">
+      <mat-form-field class="add-field" appearance="outline">
+        <mat-label>Nouveau critère</mat-label>
+        <input 
+          matInput 
+          [(ngModel)]="newCriterion.name"
+          (keyup.enter)="saveNew()"
+          (keyup.escape)="cancelAdd()"
+          placeholder="Ex: Coopération"
+          autofocus
+        >
+      </mat-form-field>
+      <button mat-mini-fab (click)="saveNew()" title="Sauvegarder">
+        <mat-icon>check</mat-icon>
+      </button>
+      <button mat-mini-fab (click)="cancelAdd()" title="Annuler">
+        <mat-icon>close</mat-icon>
+      </button>
+    </div>
+  } @else {
+    <button mat-raised-button color="primary" (click)="startAdd()" class="add-button">
+      <mat-icon>add</mat-icon>
+      Ajouter un critère
+    </button>
+  }
+</div>

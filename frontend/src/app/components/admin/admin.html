@@ -1,0 +1,36 @@
+<!-- admin.component.html -->
+<mat-toolbar color="primary">
+  <span>⚙️ Paramètres</span>
+</mat-toolbar>
+
+<mat-sidenav-container class="admin-container">
+  <!-- Side navigation -->
+  <mat-sidenav mode="side" opened class="admin-sidenav">
+    <mat-nav-list>
+      @for (item of menuItems; track item.id) {
+        <mat-list-item 
+          (click)="selectSection(item.id)"
+          [class.active]="selectedSection() === item.id"
+        >
+          <mat-icon matListItemIcon>{{ item.icon }}</mat-icon>
+          <span matListItemTitle>{{ item.label }}</span>
+        </mat-list-item>
+      }
+    </mat-nav-list>
+  </mat-sidenav>
+
+  <!-- Contenu principal -->
+  <mat-sidenav-content class="admin-content">
+    @switch (selectedSection()) {
+      @case ('players') {
+        <app-player-management />
+      }
+      @case ('games') {
+        <app-game-management />
+      }
+      @case ('criteria') {
+        <app-criterion-management />
+      }
+    }
+  </mat-sidenav-content>
+</mat-sidenav-container>

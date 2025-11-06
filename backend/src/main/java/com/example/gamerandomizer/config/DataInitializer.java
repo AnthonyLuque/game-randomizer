@@ -22,7 +22,7 @@ public class DataInitializer {
             PlayerRepository playerRepo) {
 
         return args -> {
-
+            /*
             // 1. Créer les critères
             Criterion strategie = criterionRepo.save(new Criterion("Stratégie"));
             Criterion reflexion = criterionRepo.save(new Criterion("Réflexion"));
@@ -87,7 +87,7 @@ public class DataInitializer {
             playerRepo.save(feyriss);
 
             System.out.println("✅ Données de test insérées !");
-            
+            */
         };
     }
 }
