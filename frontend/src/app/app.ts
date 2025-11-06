@@ -1,10 +1,12 @@
 import { Component, signal, computed } from '@angular/core';
 import { RouterOutlet } from '@angular/router';
 import { Player, Game, Criterion } from './models/models';
-import { mockPlayers, mockGames, mockCriteria } from './models/mock-data';
 import { PlayerSelectorComponent } from './components/player-selector/player-selector';
 import { CriterionSelectorComponent } from './components/criterion-selector/criterion-selector';
 import { GamesListComponent } from './components/games-list/games-list';
+import { PlayerService } from './services/player.service';
+import { GameService } from './services/game.service';
+import { CriterionService } from './services/criterion.service';
 
 
 @Component({
@@ -20,15 +22,63 @@ import { GamesListComponent } from './components/games-list/games-list';
   styleUrl: './app.scss'
 })
 export class App {
-  /* Mock data signals */
-  // TODO: fetch data from the backend
-  allPlayers = signal<Player[]>(mockPlayers);
-  allGames = signal<Game[]>(mockGames);
-  allCriteria = signal<Criterion[]>(mockCriteria);
+
+  /* Signals pour les données */
+  allPlayers = signal<Player[]>([]);
+  allGames = signal<Game[]>([]);
+  allCriteria = signal<Criterion[]>([]);
 
   selectedPlayers = signal<Player[]>([]);
   selectedCriteria = signal<Criterion[]>([]);
 
+  /* Injection des services */
+  constructor(
+    private playerService: PlayerService,
+    private gameService: GameService,
+    private criterionService: CriterionService
+  ) {}
+
+  /* Chargement des données au démarrage */
+  ngOnInit(): void {
+    this.loadData();
+  }
+
+  private loadData(): void {
+    // Charger les joueurs
+    this.playerService.getAll().subscribe({
+      next: (players) => {
+        this.allPlayers.set(players);
+        console.log('✅ Joueurs chargés:', players.length);
+      },
+      error: (error) => {
+        console.error('❌ Erreur lors du chargement des joueurs:', error);
+      }
+    });
+
+    // Charger les jeux
+    this.gameService.getAll().subscribe({
+      next: (games) => {
+        this.allGames.set(games);
+        console.log('✅ Jeux chargés:', games.length);
+      },
+      error: (error) => {
+        console.error('❌ Erreur lors du chargement des jeux:', error);
+      }
+    });
+
+    // Charger les critères
+    this.criterionService.getAll().subscribe({
+      next: (criteria) => {
+        this.allCriteria.set(criteria);
+        console.log('✅ Critères chargés:', criteria.length);
+      },
+      error: (error) => {
+        console.error('❌ Erreur lors du chargement des critères:', error);
+      }
+    });
+  }
+
+  /* Computed signals (logique réactive) */
   availableGames = computed(() => {
     return this.calculateGamesIntersection(this.selectedPlayers(), this.selectedCriteria());
   });
@@ -87,6 +137,7 @@ export class App {
     return warnings;
   });
 
+  /* Méthodes de calcul (logique métier) */
   private calculateGamesIntersection(selectedPlayers: Player[], selectedCriteria: Criterion[]): Game[] {
     return this.allGames().filter(game => {
       // Vérifie si le jeu est possédé par tous les joueurs sélectionnés
@@ -117,6 +168,7 @@ export class App {
       return uniqueCriteria;
   }
 
+  /* Gestionnaires d'événements */
   onPlayerAdded(player: Player) {
     this.selectedPlayers.update(players => [...players, player]);
   }
