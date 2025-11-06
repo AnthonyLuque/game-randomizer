@@ -55,28 +55,33 @@
   <!-- Ligne d'ajout -->
   @if (isAdding()) {
     <div class="add-row">
-      <mat-form-field class="add-field" appearance="outline">
-        <mat-label>Nouveau critère</mat-label>
-        <input 
-          matInput 
-          [(ngModel)]="newCriterion.name"
-          (keyup.enter)="saveNew()"
-          (keyup.escape)="cancelAdd()"
-          placeholder="Ex: Coopération"
-          autofocus
-        >
-      </mat-form-field>
-      <button mat-mini-fab (click)="saveNew()" title="Sauvegarder">
-        <mat-icon>check</mat-icon>
-      </button>
-      <button mat-mini-fab (click)="cancelAdd()" title="Annuler">
-        <mat-icon>close</mat-icon>
-      </button>
+        <div class="add-content">
+        <mat-form-field class="add-field" appearance="outline">
+            <mat-label>Nouveau critère</mat-label>
+            <input 
+            matInput 
+            [(ngModel)]="newCriterion.name"
+            (keyup.enter)="saveNew()"
+            (keyup.escape)="cancelAdd()"
+            placeholder="Ex: Coopération"
+            autofocus
+            >
+        </mat-form-field>
+        </div>
+        
+        <div class="add-actions">
+        <button mat-mini-fab color="primary" (click)="saveNew()" title="Sauvegarder">
+            <mat-icon>check</mat-icon>
+        </button>
+        <button mat-mini-fab (click)="cancelAdd()" title="Annuler">
+            <mat-icon>close</mat-icon>
+        </button>
+        </div>
     </div>
-  } @else {
+} @else {
     <button mat-raised-button color="primary" (click)="startAdd()" class="add-button">
-      <mat-icon>add</mat-icon>
-      Ajouter un critère
+        <mat-icon>add</mat-icon>
+        Ajouter un critère
     </button>
-  }
+}
 </div>

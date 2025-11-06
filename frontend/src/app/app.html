@@ -1,1 +1,20 @@
-<router-outlet></router-outlet>
+<mat-toolbar color="primary" class="navbar">
+  <span class="app-title">🎲 Game Randomizer</span>
+  
+  <span class="spacer"></span>
+  
+  <nav class="nav-links">
+    <a mat-button routerLink="/game-randomizer" routerLinkActive="active-link">
+      <mat-icon>casino</mat-icon>
+      Tirage au sort
+    </a>
+    <a mat-button routerLink="/admin" routerLinkActive="active-link">
+      <mat-icon>settings</mat-icon>
+      Paramètres
+    </a>
+  </nav>
+</mat-toolbar>
+
+<div class="main-content">
+  <router-outlet></router-outlet>
+</div>
