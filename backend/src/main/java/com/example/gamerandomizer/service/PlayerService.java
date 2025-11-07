@@ -1,42 +1,63 @@
 package com.example.gamerandomizer.service;
 
+import com.example.gamerandomizer.dto.PlayerUpdateDTO;
 import com.example.gamerandomizer.exception.ResourceNotFoundException;
+import com.example.gamerandomizer.model.Game;
 import com.example.gamerandomizer.model.Player;
+import com.example.gamerandomizer.repository.GameRepository;
 import com.example.gamerandomizer.repository.PlayerRepository;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 @Service
 public class PlayerService {
-    private final PlayerRepository repo;
+    private final PlayerRepository playerRepository;
+    private final GameRepository gameRepository;
 
-    public PlayerService(PlayerRepository repo) {
-        this.repo = repo;
+    public PlayerService(PlayerRepository playerRepository, GameRepository gameRepository) {
+        this.playerRepository = playerRepository;
+        this.gameRepository = gameRepository;
     }
 
     public List<Player> getAll() {
-        return repo.findAllWithGames(); // ← Au lieu de findAll()
+        return playerRepository.findAllWithGames();
     }
 
     public Player getById(Long id) {
-        return repo.findByIdWithGames(id) // ← Au lieu de findById()
+        return playerRepository.findByIdWithGames(id)
                 .orElseThrow(() -> new ResourceNotFoundException("Player not found with id " + id));
     }
 
+    @Transactional
     public Player create(Player player) {
-        // éventuelles règles métier ici (p.ex. unique name)
-        return repo.save(player);
+        return playerRepository.save(player);
     }
 
-    public Player update(Long id, Player updated) {
-        Player existing = getById(id);
-        existing.setUsername(updated.getUsername());
-        return repo.save(existing);
+    @Transactional
+    public Player update(Long id, PlayerUpdateDTO updateDTO) {
+        Player existing = playerRepository.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("Player not found with id " + id));
+
+        existing.setUsername(updateDTO.username());
+
+        // Mettre à jour les jeux possédés
+        Set<Game> games = new HashSet<>();
+        if (updateDTO.gameIds() != null) {
+            for (Long gameId : updateDTO.gameIds()) {
+                gameRepository.findById(gameId).ifPresent(games::add);
+            }
+        }
+        existing.setGamesOwned(games);
+
+        return playerRepository.save(existing);
     }
 
     public void delete(Long id) {
         Player existing = getById(id);
-        repo.delete(existing);
+        playerRepository.delete(existing);
     }
 }

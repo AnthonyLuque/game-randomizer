@@ -1,6 +1,7 @@
 package com.example.gamerandomizer.controller;
 
 import com.example.gamerandomizer.dto.PlayerDTO;
+import com.example.gamerandomizer.dto.PlayerUpdateDTO;
 import com.example.gamerandomizer.model.Player;
 import com.example.gamerandomizer.service.PlayerService;
 import org.springframework.http.ResponseEntity;
@@ -39,8 +40,8 @@ public class PlayerController {
     }
 
     @PutMapping("/{id}")
-    public Player update(@PathVariable Long id, @Valid @RequestBody Player player) {
-        return service.update(id, player);
+    public PlayerDTO update(@PathVariable Long id, @Valid @RequestBody PlayerUpdateDTO updateDTO) {
+        return PlayerDTO.from(service.update(id, updateDTO));
     }
 
     @DeleteMapping("/{id}")

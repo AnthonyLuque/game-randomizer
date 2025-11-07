@@ -25,7 +25,11 @@ export class CriterionService {
   }
 
   update(id: number, criterion: Criterion): Observable<Criterion> {
-    return this.http.put<Criterion>(`${this.apiUrl}/${id}`, criterion);
+    // Transformer en CriterionUpdateDTO
+    const updateDTO = {
+      name: criterion.name
+    };
+    return this.http.put<Criterion>(`${this.apiUrl}/${id}`, updateDTO);
   }
 
   delete(id: number): Observable<void> {

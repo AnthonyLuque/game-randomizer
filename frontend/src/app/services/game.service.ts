@@ -25,7 +25,12 @@ export class GameService {
   }
 
   update(id: number, game: Game): Observable<Game> {
-    return this.http.put<Game>(`${this.apiUrl}/${id}`, game);
+    // Transformer en GameUpdateDTO
+    const updateDTO = {
+      title: game.title,
+      criteriaIds: game.criteria.map(c => c.id)
+    };
+    return this.http.put<Game>(`${this.apiUrl}/${id}`, updateDTO);
   }
 
   delete(id: number): Observable<void> {

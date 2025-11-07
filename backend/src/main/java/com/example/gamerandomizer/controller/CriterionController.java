@@ -1,6 +1,7 @@
 package com.example.gamerandomizer.controller;
 
 import com.example.gamerandomizer.dto.CriterionDTO;
+import com.example.gamerandomizer.dto.CriterionUpdateDTO;
 import com.example.gamerandomizer.model.Criterion;
 import com.example.gamerandomizer.service.CriterionService;
 import org.springframework.http.ResponseEntity;
@@ -39,8 +40,8 @@ public class CriterionController {
     }
 
     @PutMapping("/{id}")
-    public Criterion update(@PathVariable Long id, @Valid @RequestBody Criterion criterion) {
-        return service.update(id, criterion);
+    public CriterionDTO update(@PathVariable Long id, @Valid @RequestBody CriterionUpdateDTO updateDTO) {
+        return CriterionDTO.from(service.update(id, updateDTO));
     }
 
     @DeleteMapping("/{id}")

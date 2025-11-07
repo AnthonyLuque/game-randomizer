@@ -31,7 +31,12 @@ export class PlayerService {
 
   // Met à jour un joueur existant
   update(id: number, player: Player): Observable<Player> {
-    return this.http.put<Player>(`${this.apiUrl}/${id}`, player);
+    // Transformer en PlayerUpdateDTO
+    const updateDTO = {
+      username: player.username,
+      gameIds: player.gamesOwned.map(g => g.id)
+    };
+    return this.http.put<Player>(`${this.apiUrl}/${id}`, updateDTO);
   }
 
   // Supprime un joueur
